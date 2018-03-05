@@ -22,7 +22,7 @@ public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idEmploye;
+    private Long idEmployee;
     
     //est-ce qu'on lui mets un nom, prenom ?
     
@@ -36,7 +36,7 @@ public class Employee implements Serializable {
         this.information=information;
     }
     public Long getId() {
-        return idEmploye;
+        return idEmployee;
     }
     
      public Information getInformation() {
@@ -50,7 +50,7 @@ public class Employee implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idEmploye != null ? idEmploye.hashCode() : 0);
+        hash += (idEmployee != null ? idEmployee.hashCode() : 0);
         return hash;
     }
 
@@ -61,7 +61,7 @@ public class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.idEmploye == null && other.idEmploye != null) || (this.idEmploye != null && !this.idEmploye.equals(other.idEmploye))) {
+        if ((this.idEmployee == null && other.idEmployee != null) || (this.idEmployee != null && !this.idEmployee.equals(other.idEmployee))) {
             return false;
         }
         return true;
@@ -69,7 +69,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.Employe[ id=" + idEmploye + " ]";
+        return "Employee{" + "idEmployee=" + idEmployee + ", information=" + information + '}';
     }
     
 }

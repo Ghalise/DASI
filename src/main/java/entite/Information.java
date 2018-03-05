@@ -25,6 +25,18 @@ public class Information implements Serializable {
     
     private String password;
 
+    public Information() {
+    }
+    
+    public Information(String mail, String address, String phone, String password) {
+        this.mail = mail;
+        this.address = address;
+        this.phone = phone;
+        this.password = password;
+    }
+
+    
+    
     public String getMail() {
         return mail;
     }
@@ -61,6 +73,5 @@ public class Information implements Serializable {
     public String toString() {
         return "Information{" + "mail=" + mail + ", address=" + address + ", phone=" + phone + ", password=" + password + '}';
     }
-
-    
+ 
 }

@@ -3,6 +3,7 @@
  */
 package entite;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import util.AstroTest;
 
 /**
  *
@@ -25,12 +27,12 @@ import javax.persistence.TemporalType;
 public class Client implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   // public static enum Civilite{M,F,A};
+     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idClient;
     
-   // private Gender gender;
+    private String gender;
     
     private String surname;
     
@@ -41,18 +43,23 @@ public class Client implements Serializable {
     
     @Embedded
     private Information information;
+    
+    @Embedded
+    private AstroProfile astroProfile;
 
     public Client() {
     }
 
-    public Client( String surname, String firstname, String birthDate) {
+    public Client(String gender, String surname, String firstname, String birthDate, Information information) {
         try {
-            //this.civilite=civilite;
+            this.gender=gender;
             this.surname = surname;
             this.firstname = firstname;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date dn = sdf.parse(birthDate);
             this.birthDate = dn;
+            this.information=information;
+            createAstroProfile();
         } catch (ParseException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,7 +101,16 @@ public class Client implements Serializable {
         this.information = information;
     }
 
-
+    public void createAstroProfile(){
+        //@TODO probleme avec la clef
+        AstroTest at=new AstroTest("ASTRO-01-M0lGLURBU0ktQVNUUk8tQjAx");
+        try {
+            astroProfile = new AstroProfile(at.getProfil(firstname, birthDate));
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -117,7 +133,7 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        return "Client{" + "idClient=" + idClient + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + '}';
+        return "Client{" + "idClient=" + idClient + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + ", information=" + information + '}';
     }
 
 }

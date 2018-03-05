@@ -5,6 +5,7 @@
     <class>entite.Client</class>
     <class>entite.Information</class>
     <class>entite.Employee</class>
+    <class>entite.AstroProfile</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/POSITIF"/>
       <property name="javax.persistence.jdbc.user" value="ghalise"/>

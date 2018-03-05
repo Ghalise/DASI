@@ -9,6 +9,7 @@ package IHM;
 
 import dao.JpaUtil;
 import entite.Client;
+import entite.Information;
 import service.Service;
 
 
@@ -27,7 +28,8 @@ public class TestClient  {
      */
     public static void main(String[] args) {
         JpaUtil.init();
-        Client c = new Client("sparrow","jack","02/01/1400");
+        Information info=new Information("spar.row@gmail.com","caraibes","06666666","jackie chan");
+        Client c = new Client("M","sparrow","jack","02/01/1400",info);
         Service s=new Service();
         s.createClient(c);
         JpaUtil.destroy();
