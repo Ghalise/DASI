@@ -7,12 +7,9 @@ package service;
 
 import entite.Client;
 import dao.ClientDao;
+import dao.EmployeDao;
 import dao.JpaUtil;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import entite.Employe;
 /**
  *
  * @author erouille
@@ -22,6 +19,7 @@ public class Service {
     // utile de penser la classe service comme un objet car on pourrait avoir des attributs à l'avenir (ex : langue utilisateur)
     public Service(){}
     
+    //**************** SERVICES CLIENT ****************
     public void createClient(Client c)
     {
         JpaUtil.creerEntityManager();
@@ -48,6 +46,31 @@ public class Service {
         return c;
     }
     
+    //**************** SERVICES EMPLOYE ****************
+    public void createEmploye(Employe emp)
+    {
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        EmployeDao cd= new EmployeDao();
+        try{
+            cd.create(emp);
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        }  
+       
+    }
+    
+    public Employe findEmploye (long id){
+        //pas de try catch ?
+        JpaUtil.creerEntityManager();
+        EmployeDao cd= new EmployeDao();
+        Employe emp=cd.find(id);
+        JpaUtil.fermerEntityManager();
+        return emp;
+    }
    
     
     
