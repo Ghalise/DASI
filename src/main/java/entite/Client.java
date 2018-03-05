@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +38,9 @@ public class Client implements Serializable {
     
     @Temporal(TemporalType.DATE)
     private Date birthDate;
+    
+    @Embedded
+    private Information information;
 
     public Client() {
     }
@@ -80,6 +84,14 @@ public class Client implements Serializable {
 
     public Long getIdClient() {
         return idClient;
+    }
+
+    public Information getInformation() {
+        return information;
+    }
+
+    public void setInformation(Information information) {
+        this.information = information;
     }
 
 

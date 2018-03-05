@@ -4,6 +4,7 @@
 package entite;
 
 import java.io.Serializable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,15 +23,30 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idEmploye;
-    ;
+    
+    //est-ce qu'on lui mets un nom, prenom ?
+    
+    @Embedded
+    private Information information;
 
     public Employee() {
     }
 
+    public Employee(Information information){
+        this.information=information;
+    }
     public Long getId() {
         return idEmploye;
     }
+    
+     public Information getInformation() {
+        return information;
+    }
 
+    public void setInformation(Information information) {
+        this.information = information;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
