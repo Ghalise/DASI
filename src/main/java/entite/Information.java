@@ -23,9 +23,9 @@ public class Information implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private address address;
+    private String address;
     
-    private phone phone;
+    private String phone;
 
     public Long getId() {
         return id;
