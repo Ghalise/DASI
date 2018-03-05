@@ -5,43 +5,43 @@
  */
 package dao;
 
-import entite.Employe;
+import entite.Employee;
 import java.util.Collection;
 import javax.persistence.Query;
 /**
  *
  * @author erouille
  */
-public class EmployeDao { 
+public class EmployeeDao { 
     
-    public EmployeDao()
+    public EmployeeDao()
     {}
     
     // pour creer un client dans la BD POSITIF il faut le persister grâce à notre entityManager
-    public void create(Employe e){
+    public void create(Employee e){
         JpaUtil.obtenirEntityManager().persist(e);
     }
     
     // le client existe déjà et on veut changer ses attributs, on va donc utiliser la fonction merge de l'entityManager
     // utilisé ?
-    public Employe update(Employe e){
+    public Employee update(Employee e){
         e=JpaUtil.obtenirEntityManager().merge(e);
         
         return  e;
     }
     
     // on va trouver un client donné grâce à sa clef (id)
-    public Employe find(long id){
-        Employe e=JpaUtil.obtenirEntityManager().find(Employe.class, id);
+    public Employee find(long id){
+        Employee e=JpaUtil.obtenirEntityManager().find(Employee.class, id);
         
         return e;
     }
     
     // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
     // utilisé?
-     public Collection<Employe> findAll(){
+     public Collection<Employee> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employe e");
         
-        return (Collection<Employe>)q.getResultList();
+        return (Collection<Employee>)q.getResultList();
     }
 }

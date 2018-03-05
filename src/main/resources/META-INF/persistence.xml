@@ -3,7 +3,8 @@
   <persistence-unit name="persistence" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>entite.Client</class>
-    <class>entite.Employe</class>
+    <class>entite.Information</class>
+    <class>entite.Employee</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/POSITIF"/>
       <property name="javax.persistence.jdbc.user" value="ghalise"/>

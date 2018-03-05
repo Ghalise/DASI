@@ -15,7 +15,7 @@ import javax.persistence.Id;
  * @author erouille
  */
 @Entity
-public class Employe implements Serializable {
+public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class Employe implements Serializable {
     private Long idEmploye;
     ;
 
-    public Employe() {
+    public Employee() {
     }
 
     public Long getId() {
@@ -44,7 +44,7 @@ public class Employe implements Serializable {
         if (!(object instanceof Client)) {
             return false;
         }
-        Employe other = (Employe) object;
+        Employee other = (Employee) object;
         if ((this.idEmploye == null && other.idEmploye != null) || (this.idEmploye != null && !this.idEmploye.equals(other.idEmploye))) {
             return false;
         }

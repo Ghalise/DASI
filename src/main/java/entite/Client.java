@@ -29,66 +29,59 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idClient;
     
-   // private Civilite civilite;
+   // private Gender gender;
     
-    private String nom;
+    private String surname;
     
-    private String prenom;
+    private String firstname;
     
     @Temporal(TemporalType.DATE)
-    private Date dateNaissance;
+    private Date birthDate;
 
     public Client() {
     }
 
-    public Client( String nom, String prenom, String dateNaissance) {
+    public Client( String surname, String firstname, String birthDate) {
         try {
             //this.civilite=civilite;
-            this.nom = nom;
-            this.prenom = prenom;
+            this.surname = surname;
+            this.firstname = firstname;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date dn = sdf.parse(dateNaissance);
-            this.dateNaissance = dn;
+            Date dn = sdf.parse(birthDate);
+            this.birthDate = dn;
         } catch (ParseException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-//    public void setCivilite(Civilite civilite) {
-//        this.civilite = civilite;
-//    }
-//           
-    public void setNom(String nom) {
-        this.nom = nom;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
-        this.dateNaissance = dateNaissance;
+    public String getFirstname() {
+        return firstname;
     }
 
-//     public Civilite getCivilite() {
-//       return civilite;
-//    }
-      
-    public String getNom() {
-        return nom;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public Date getDateNaissance() {
-        return dateNaissance;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public Long getId() {
+    public Long getIdClient() {
         return idClient;
     }
+
 
     @Override
     public int hashCode() {
@@ -109,16 +102,10 @@ public class Client implements Serializable {
         }
         return true;
     }
-    
-
-//    @Override
-//    public String toString() {
-//        return "Client{" + "idClient=" + idClient + ", civilite=" + civilite + ", nom=" + nom + ", prenom=" + prenom + ", dateNaissance=" + dateNaissance + '}';
-//    }
 
     @Override
     public String toString() {
-        return "Client{" + "idClient=" + idClient + ", nom=" + nom + ", prenom=" + prenom + ", dateNaissance=" + dateNaissance + '}';
+        return "Client{" + "idClient=" + idClient + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + '}';
     }
 
 }

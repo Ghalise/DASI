@@ -7,9 +7,9 @@ package service;
 
 import entite.Client;
 import dao.ClientDao;
-import dao.EmployeDao;
+import dao.EmployeeDao;
 import dao.JpaUtil;
-import entite.Employe;
+import entite.Employee;
 /**
  *
  * @author erouille
@@ -47,11 +47,11 @@ public class Service {
     }
     
     //**************** SERVICES EMPLOYE ****************
-    public void createEmploye(Employe emp)
+    public void createEmployee(Employee emp)
     {
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
-        EmployeDao cd= new EmployeDao();
+        EmployeeDao cd= new EmployeeDao();
         try{
             cd.create(emp);
             JpaUtil.validerTransaction();
@@ -63,14 +63,16 @@ public class Service {
        
     }
     
-    public Employe findEmploye (long id){
+    public Employee findEmployee (long id){
         //pas de try catch ?
         JpaUtil.creerEntityManager();
-        EmployeDao cd= new EmployeDao();
-        Employe emp=cd.find(id);
+        EmployeeDao cd= new EmployeeDao();
+        Employee emp=cd.find(id);
         JpaUtil.fermerEntityManager();
         return emp;
     }
+    
+    
    
     
     
