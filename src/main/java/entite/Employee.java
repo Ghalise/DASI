@@ -62,6 +62,7 @@ public class Employee implements Serializable {
             Date dn = sdf.parse(birthDate);
             this.birthDate = dn;
             this.information = information;
+            this.free=true;
          } catch (ParseException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,8 +102,9 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "Employee{" + "idEmployee=" + idEmployee + ", information=" + information + '}';
+        return "Employee{" + "idEmployee=" + idEmployee + ", gender=" + gender + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + ", information=" + information + ", free=" + free + ", voyances=" + voyances + '}';
     }
+
     
     public void addVoyance(Voyance voyance){
         this.voyances.add(voyance);

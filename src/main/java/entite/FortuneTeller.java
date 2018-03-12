@@ -23,7 +23,7 @@ public class FortuneTeller extends Medium implements Serializable {
     public FortuneTeller() {
     }
 
-    public FortuneTeller(String media, String name, String biography) {
+    public FortuneTeller(String name, String biography, String media) {
         super(name, biography);
         this.media = media;
     }

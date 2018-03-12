@@ -9,7 +9,9 @@ import entite.Client;
 import dao.ClientDao;
 import dao.EmployeeDao;
 import dao.JpaUtil;
+import dao.MediumDao;
 import entite.Employee;
+import entite.Medium;
 import javax.persistence.RollbackException;
 /**
  *
@@ -104,6 +106,21 @@ public class Service {
         System.out.println("Corps:");
         System.out.println("Bonjour "+c.getFirstname()+",");
         System.out.println("Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro de client est : "+c.getIdClient());        
+    }
+   //**************** SERVICES MEDIUM ****************
+    public void createMedium(Medium m)
+    {
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        MediumDao md= new MediumDao();
+        try{
+            md.create(m);
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        }  
     }
     
     private void sendMailFail(Client c){
