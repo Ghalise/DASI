@@ -12,6 +12,7 @@ import dao.JpaUtil;
 import dao.MediumDao;
 import entite.Employee;
 import entite.Medium;
+import javax.persistence.RollbackException;
 /**
  *
  * @author erouille
@@ -30,8 +31,10 @@ public class Service {
         try{
             cd.create(c);
             JpaUtil.validerTransaction();
-        }catch(Exception e){
+            sendMailSuccess(c);
+        }catch(RollbackException e){
             JpaUtil.annulerTransaction();
+            sendMailFail(c);
         }finally{ 
             JpaUtil.fermerEntityManager();
         }  
@@ -68,7 +71,7 @@ public class Service {
         try{
             cd.create(emp);
             JpaUtil.validerTransaction();
-        }catch(Exception e){
+        }catch(RollbackException e){
             JpaUtil.annulerTransaction();
         }finally{ 
             JpaUtil.fermerEntityManager();
@@ -85,7 +88,25 @@ public class Service {
         return emp;
     }
     
+    public Employee connectEmployee(String mail, String password){
+        JpaUtil.creerEntityManager();
+        EmployeeDao ed= new EmployeeDao();
+        Employee e=ed.findByMail(mail);
+        if(e.getInformation().getPassword().equals(password)){
+            e=null;
+        }
+        JpaUtil.fermerEntityManager();
+        return e;
+    }
     
+    private void sendMailSuccess(Client c){
+        System.out.println("Expediteur: contact@posit.if");
+        System.out.println("Pour: "+c.getInformation().getMail());
+        System.out.println("Sujet: Bienvenue chez POSIT'IF");
+        System.out.println("Corps:");
+        System.out.println("Bonjour "+c.getFirstname()+",");
+        System.out.println("Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro de client est : "+c.getIdClient());        
+    }
    //**************** SERVICES MEDIUM ****************
     public void createMedium(Medium m)
     {
@@ -117,12 +138,13 @@ public class Service {
         }  
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+    private void sendMailFail(Client c){
+        System.out.println("Expediteur: contact@posit.if");
+        System.out.println("Pour: "+c.getInformation().getMail());
+        System.out.println("Sujet: Bienvenue chez POSIT'IF");
+        System.out.println("Corps:");
+        System.out.println("Bonjour "+c.getFirstname()+",");
+        System.out.println("Votre inscription au service POSIT'IF a malencontreusement échoué... Merci de recommencer ultérieurement.");        
+    }
+     
 }

@@ -33,15 +33,23 @@ public class EmployeeDao {
     // on va trouver un client donné grâce à sa clef (id)
     public Employee find(long id){
         Employee e=JpaUtil.obtenirEntityManager().find(Employee.class, id);
-        
         return e;
+    }
+    
+    public Employee findByMail(String email){
+        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employee e WHERE e.information.mail = :email");
+        q.setParameter("email", email);
+        if(q.getResultList().isEmpty()){
+            return null;
+        }else{
+            return (Employee) q.getResultList().get(0);
+        }        
     }
     
     // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
     // utilisé?
      public Collection<Employee> findAll(){
-        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employe e");
-        
+        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employee e");
         return (Collection<Employee>)q.getResultList();
     }
 }
