@@ -23,7 +23,7 @@ public class TarotReader extends Medium implements Serializable {
     public TarotReader() {
     }
     
-    public TarotReader(String cards, String name, String biography, String talent) {
+    public TarotReader(String name, String biography, String talent, String cards) {
         super(name, biography);
         this.cards = cards;
     }

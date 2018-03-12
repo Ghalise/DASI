@@ -4,19 +4,19 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>entite.Client</class>
     <class>entite.Information</class>
-    <class>entite.Employee</class>
     <class>entite.AstroProfile</class>
     <class>entite.Voyance</class>
     <class>entite.Medium</class>
     <class>entite.FortuneTeller</class>
     <class>entite.Astrologer</class>
     <class>entite.TarotReader</class>
+    <class>entite.Employee</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/POSITIF"/>
       <property name="javax.persistence.jdbc.user" value="ghalise"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.password" value="0000"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
 </persistence>

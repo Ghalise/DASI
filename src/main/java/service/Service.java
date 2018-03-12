@@ -9,7 +9,9 @@ import entite.Client;
 import dao.ClientDao;
 import dao.EmployeeDao;
 import dao.JpaUtil;
+import dao.MediumDao;
 import entite.Employee;
+import entite.Medium;
 /**
  *
  * @author erouille
@@ -84,7 +86,22 @@ public class Service {
     }
     
     
-   
+   //**************** SERVICES MEDIUM ****************
+    public void createMedium(Medium m)
+    {
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        MediumDao md= new MediumDao();
+        try{
+            md.create(m);
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        }  
+       
+    }
     
     
     
