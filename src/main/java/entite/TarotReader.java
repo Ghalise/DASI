@@ -25,6 +25,10 @@ public class TarotReader extends Medium implements Serializable {
         this.cards = cards;
     }
 
+    public TarotReader() {
+    }
+    
+
     public String getCards() {
         return cards;
     }

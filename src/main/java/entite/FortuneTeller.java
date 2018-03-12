@@ -23,6 +23,9 @@ public class FortuneTeller implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public FortuneTeller() {
+    }
+
     public Long getId() {
         return id;
     }

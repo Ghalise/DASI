@@ -28,10 +28,11 @@ public class TestClient  {
      */
     public static void main(String[] args) {
         JpaUtil.init();
-        Information info=new Information("spar.row@gmail.com","caraibes","06666666","jackie chan");
-        Client c = new Client("M","sparrow","jack","02/01/1400",info);
+        //Information info=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
+        //Client c = new Client("M","benchekroun","el ghali","20/01/1997",info);
         Service s=new Service();
-        s.createClient(c);
+        s.connectClient("el.benchekroun@gmail.com", "che");
+        //s.createClient(c);
         JpaUtil.destroy();
     }
     

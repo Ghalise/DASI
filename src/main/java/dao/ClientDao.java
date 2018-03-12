@@ -37,6 +37,16 @@ public class ClientDao {
         return c;
     }
     
+    public Client findByMail(String email){
+        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT c FROM Client c WHERE c.information.mail = :email");
+        q.setParameter("email", email);
+        if(q.getResultList().isEmpty()){
+            return null;
+        }else{
+            return (Client) q.getResultList().get(0);
+        }        
+    }
+    
     // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
     // utilisé?
      public Collection<Client> findAll(){

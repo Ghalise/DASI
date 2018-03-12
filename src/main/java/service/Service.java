@@ -36,6 +36,17 @@ public class Service {
        
     }
     
+    public Client connectClient(String mail, String password){
+        JpaUtil.creerEntityManager();
+        ClientDao cd= new ClientDao();
+        Client c=cd.findByMail(mail);
+        if(c.getInformation().getPassword().equals(password)){
+            c=null;
+        }
+        JpaUtil.fermerEntityManager();
+        return c;
+    }
+    
     //service utilisé par un employé pour avoir accès aux informations concernant un client
     public Client findClient (long id){
         //pas de try catch ?
