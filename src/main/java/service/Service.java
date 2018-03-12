@@ -100,7 +100,21 @@ public class Service {
         }finally{ 
             JpaUtil.fermerEntityManager();
         }  
-       
+    }
+    
+    public void affectEmployee(Employee emp, Medium m)
+    {
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        MediumDao md= new MediumDao();
+        try{
+            md.affect(emp,m);
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        }  
     }
     
     
