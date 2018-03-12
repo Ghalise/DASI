@@ -49,7 +49,7 @@ public class MediumDao {
         
         Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Medium med JOIN med.employees e WHERE med = :m AND e.free = true");
         q.setParameter("m", m);
-        
+        //recuperer son  nombre de voyance grâce à la liste ! 
         return (List<Employee>) q.getResultList();
     }
     
