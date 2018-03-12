@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -28,22 +29,41 @@ public class Voyance implements Serializable {
     private int endHour;
     
     private String comment;
+    
+    @ManyToOne //bidirectional
+    private Employee employee;
+    
+    @ManyToOne
+    private Medium medium;
+    
+    @ManyToOne
+    private Client client;
 
     public Voyance() {
     }
-    
-    public Voyance(int beginHour, int endHour, String comment) {
-        this.beginHour = beginHour;
-        this.endHour = endHour;
-        this.comment = comment;
+
+    //?? plutôt les id et pas un client en entier ?
+
+    public Voyance(Employee employee, Medium medium, Client client) {
+        this.employee = employee;
+        this.medium = medium;
+        this.client = client;
     }
 
+    public int getBeginHour() {
+        return beginHour;
+    }
+
+    public void setBeginHour(int beginHour) {
+        this.beginHour = beginHour;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+    
     public Long getIdVoyance() {
         return idVoyance;
-    }
-
-    public void setIdVoyance(Long idVoyance) {
-        this.idVoyance = idVoyance;
     }
 
     public int getEndHour() {
@@ -58,16 +78,16 @@ public class Voyance implements Serializable {
         return comment;
     }
 
+    public Medium getMedium() {
+        return medium;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public Long getId() {
-        return idVoyance;
-    }
-
-    public void setId(Long id) {
-        this.idVoyance = id;
     }
 
     @Override
@@ -92,7 +112,7 @@ public class Voyance implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.Voyance[ id=" + idVoyance + " ]";
+        return "Voyance{" + "idVoyance=" + idVoyance + ", beginHour=" + beginHour + ", endHour=" + endHour + ", comment=" + comment + ", employee=" + employee + ", medium=" + medium + ", client=" + client + '}';
     }
     
 }

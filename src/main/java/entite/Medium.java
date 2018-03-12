@@ -6,17 +6,22 @@
 package entite;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 
 /**
  *
  * @author erouille
  */
 @Entity
-public class Medium implements Serializable {
+@Inheritance (strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Medium implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -27,15 +32,15 @@ public class Medium implements Serializable {
     
     private String biography;
     
-    private String talent;
+    @ManyToMany
+    private List<Employee> employees;
 
     public Medium() {
     }
 
-    public Medium(String name, String biography, String talent) {
+    public Medium(String name, String biography) {
         this.name = name;
         this.biography = biography;
-        this.talent = talent;
     }
 
     public Long getId() {
@@ -44,6 +49,22 @@ public class Medium implements Serializable {
 
     public void setId(Long id) {
         this.idMedium = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Long getIdMedium() {
+        return idMedium;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
     @Override
@@ -69,6 +90,14 @@ public class Medium implements Serializable {
     @Override
     public String toString() {
         return "entite.Medium[ id=" + idMedium + " ]";
+    }
+    
+    public void addEmployee(Employee e){
+        this.employees.add(e);
+    }
+    
+    public void removeEmployee(Employee e){
+        this.employees.remove(e);
     }
     
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Embedded;
@@ -14,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -42,6 +44,11 @@ public class Employee implements Serializable {
     
     @Embedded
     private Information information;
+    
+    private boolean free;
+    
+    @OneToMany(mappedBy="employee")
+    private List<Voyance> voyances;
 
     public Employee() {
     }
@@ -97,4 +104,7 @@ public class Employee implements Serializable {
         return "Employee{" + "idEmployee=" + idEmployee + ", information=" + information + '}';
     }
     
+    public void addVoyance(Voyance voyance){
+        this.voyances.add(voyance);
+    }
 }

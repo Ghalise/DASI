@@ -20,14 +20,13 @@ public class TarotReader extends Medium implements Serializable {
     
     private String cards;
 
-    public TarotReader(String cards, String name, String biography, String talent) {
-        super(name, biography, talent);
-        this.cards = cards;
-    }
-
     public TarotReader() {
     }
     
+    public TarotReader(String cards, String name, String biography, String talent) {
+        super(name, biography);
+        this.cards = cards;
+    }
 
     public String getCards() {
         return cards;
@@ -39,7 +38,7 @@ public class TarotReader extends Medium implements Serializable {
 
     @Override
     public String toString() {
-        return "TarotReader{" + "cards=" + cards + '}';
+        return super.toString() + "TarotReader{" + "cards=" + cards + '}';
     }
     
     

@@ -16,44 +16,40 @@ import javax.persistence.Id;
  * @author erouille
  */
 @Entity
-public class Astrologer implements Serializable {
+public class Astrologer extends Medium implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String school;
+    
+    private String promotion;
 
-    public Long getId() {
-        return id;
+    public Astrologer() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Astrologer(String school, String promotion, String name, String biography) {
+        super(name, biography);
+        this.school = school;
+        this.promotion = promotion;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public String getSchool() {
+        return school;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Astrologer)) {
-            return false;
-        }
-        Astrologer other = (Astrologer) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(String promotion) {
+        this.promotion = promotion;
     }
 
     @Override
     public String toString() {
-        return "entite.Astrologer[ id=" + id + " ]";
+        return super.toString() + "Astrologer{" + "school=" + school + ", promotion=" + promotion + '}';
     }
     
 }
