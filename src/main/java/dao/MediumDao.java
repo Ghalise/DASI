@@ -47,9 +47,13 @@ public class MediumDao {
     public Employee attributeEmployee(Medium m){
         
         Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT med.employees FROM Medium med WHERE med.=:m");
-        
         q.setParameter("m", m);
         
         return (Employee)q.getSingleResult();
+    }
+    
+    public void affect(Employee e, Medium m){
+        m.addEmployee(e);
+        JpaUtil.obtenirEntityManager().merge(m);
     }
 }
