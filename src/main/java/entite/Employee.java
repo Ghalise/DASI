@@ -4,11 +4,18 @@
 package entite;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 /**
@@ -24,7 +31,14 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idEmployee;
     
-    //est-ce qu'on lui mets un nom, prenom ?
+    private String gender;
+    
+    private String surname;
+    
+    private String firstname;
+    
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
     
     @Embedded
     private Information information;
@@ -32,9 +46,20 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public Employee(Information information){
-        this.information=information;
+    public Employee(String gender, String surname, String firstname, String birthDate, Information information) {
+        try{
+            this.gender = gender;
+            this.surname = surname;
+            this.firstname = firstname;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dn = sdf.parse(birthDate);
+            this.birthDate = dn;
+            this.information = information;
+         } catch (ParseException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
     public Long getId() {
         return idEmployee;
     }
