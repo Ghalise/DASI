@@ -7,9 +7,7 @@ package entite;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 
 /**
  *
@@ -38,7 +36,7 @@ public class TarotReader extends Medium implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "TarotReader{" + "cards=" + cards + '}';
+        return super.toString() + " Talent : Tarologue \n"+ " Cartes : " + this.cards +"\n" ;
     }
     
     

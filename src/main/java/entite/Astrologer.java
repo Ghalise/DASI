@@ -7,9 +7,7 @@ package entite;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 
 /**
  *
@@ -49,7 +47,7 @@ public class Astrologer extends Medium implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "Astrologer{" + "school=" + school + ", promotion=" + promotion + '}';
+        return super.toString() + " Talent : Astrologue \n"+ " Ecole : " + this.school +"\n Promotion : "+this.promotion+" \n";
     }
     
 }

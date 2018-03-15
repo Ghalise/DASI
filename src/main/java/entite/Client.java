@@ -101,6 +101,20 @@ public class Client implements Serializable {
         this.information = information;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    
+    public AstroProfile getAstroProfile() {
+        return astroProfile;
+    }
+    
+    
+
     public void createAstroProfile(){
         //@TODO probleme avec la clef
         AstroTest at=new AstroTest("ASTRO-01-M0lGLURBU0ktQVNUUk8tQjAx");

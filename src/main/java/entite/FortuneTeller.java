@@ -7,9 +7,6 @@ package entite;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
@@ -38,7 +35,7 @@ public class FortuneTeller extends Medium implements Serializable {
 
     @Override
     public String toString() {
-        return super.toString() + "FortuneTeller{" + "media=" + media + '}';
+        return super.toString() + " Talent : Voyant \n"+ " Support : " + this.media +"\n" ;
     }
     
 }

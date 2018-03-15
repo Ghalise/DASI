@@ -89,7 +89,7 @@ public abstract class Medium implements Serializable {
 
     @Override
     public String toString() {
-        return "entite.Medium[ id=" + idMedium + " ]";
+        return "Nom : "+this.name+" \n Bio : "+this.biography+"\n";
     }
     
     public void addEmployee(Employee e){
