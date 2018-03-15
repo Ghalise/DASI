@@ -25,14 +25,12 @@ public class MediumDao {
     
     public Medium update(Medium m){
         m=JpaUtil.obtenirEntityManager().merge(m);
-        
         return  m;
     }
     
     // on va trouver un client donné grâce à sa clef (id)
     public Medium find(long id){
         Medium m=JpaUtil.obtenirEntityManager().find(Medium.class, id);
-        
         return m;
     }
     
@@ -40,7 +38,6 @@ public class MediumDao {
     // utilisé?
      public Collection<Medium> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT m FROM Medium m");
-        
         return (Collection<Medium>)q.getResultList();
     }
      
