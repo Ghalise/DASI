@@ -142,6 +142,15 @@ public class Service {
         }  
     }
     
+    public Medium findMedium (long id){
+        //pas de try catch ?
+        JpaUtil.creerEntityManager();
+        MediumDao cd= new MediumDao();
+        Medium m=cd.find(id);
+        JpaUtil.fermerEntityManager();
+        return m;
+    }
+    
     public void affectEmployee(Employee emp, Medium m)
     {
         JpaUtil.creerEntityManager();
@@ -156,6 +165,19 @@ public class Service {
             JpaUtil.fermerEntityManager();
         }  
     }
+    
+    public void getEmployee(Medium m)
+    {
+        JpaUtil.creerEntityManager();
+        MediumDao md= new MediumDao();
+        
+        System.out.println(md.attributeEmployee(m));
+            
+       
+        JpaUtil.fermerEntityManager();
+         
+    }
+
     
     private void sendMailFail(Client c){
         System.out.println("Expediteur: contact@posit.if");

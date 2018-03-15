@@ -8,6 +8,7 @@ package dao;
 import entite.Employee;
 import entite.Medium;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Query;
 
 /**
@@ -41,12 +42,12 @@ public class MediumDao {
         return (Collection<Medium>)q.getResultList();
     }
      
-    public Employee attributeEmployee(Medium m){
+    public List<Employee> attributeEmployee(Medium m){
         
-        Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT med.employees FROM Medium med WHERE med.=:m");
+        Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Medium med JOIN med.employees e WHERE med = :m AND e.free = true");
         q.setParameter("m", m);
-        
-        return (Employee)q.getSingleResult();
+        //recuperer son  nombre de voyance grâce à la liste ! 
+        return (List<Employee>) q.getResultList();
     }
     
     public void affect(Employee e, Medium m){
