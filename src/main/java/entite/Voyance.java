@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Version;
 
 /**
  *
@@ -38,6 +39,9 @@ public class Voyance implements Serializable {
     
     @ManyToOne
     private Client client;
+    
+    @Version
+    private int version;
 
     public Voyance() {
     }

@@ -26,7 +26,6 @@ public class ClientDao {
     // utilisé ?
     public Client update(Client c){
         c=JpaUtil.obtenirEntityManager().merge(c);
-        
         return  c;
     }
     
@@ -43,7 +42,7 @@ public class ClientDao {
         if(q.getResultList().isEmpty()){
             return null;
         }else{
-            return (Client) q.getResultList().get(0);
+            return (Client) q.getSingleResult();
         }        
     }
     

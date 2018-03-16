@@ -70,6 +70,13 @@ public class Service {
         JpaUtil.fermerEntityManager();
         return m;
     }
+    
+    //TODO: Affecter automatiquement un Médium à un Employé, 
+    public void askForVoyance(Client c, Medium m){
+        
+        sendNotification(c,m);
+        
+    }
         
     //**************** SERVICES EMPLOYE ****************
     public void createEmployee(Employee emp)
@@ -89,7 +96,6 @@ public class Service {
     }
     
     public Employee findEmployee (long id){
-        //pas de try catch ?
         JpaUtil.creerEntityManager();
         EmployeeDao cd= new EmployeeDao();
         Employee emp=cd.find(id);
@@ -110,7 +116,6 @@ public class Service {
     
     //Service utilisé pour avoir accès aux informations concernant un client
     public Client findClient (long id){
-        //pas de try catch ?
         JpaUtil.creerEntityManager();
         ClientDao cd= new ClientDao();
         Client c=cd.find(id);
@@ -118,14 +123,8 @@ public class Service {
         return c;
     }
     
-    private void sendMailSuccess(Client c){
-        System.out.println("Expediteur: contact@posit.if");
-        System.out.println("Pour: "+c.getInformation().getMail());
-        System.out.println("Sujet: Bienvenue chez POSIT'IF");
-        System.out.println("Corps:");
-        System.out.println("Bonjour "+c.getFirstname()+",");
-        System.out.println("Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro de client est : "+c.getIdClient());        
-    }
+    
+    
    //**************** SERVICES MEDIUM ****************
     public void createMedium(Medium m)
     {
@@ -172,12 +171,12 @@ public class Service {
         MediumDao md= new MediumDao();
         
         System.out.println(md.attributeEmployee(m));
-            
        
         JpaUtil.fermerEntityManager();
          
     }
 
+    //**************** SERVICES COMPLEMENTAIRES ****************
     
     private void sendMailFail(Client c){
         System.out.println("Expediteur: contact@posit.if");
@@ -187,5 +186,20 @@ public class Service {
         System.out.println("Bonjour "+c.getFirstname()+",");
         System.out.println("Votre inscription au service POSIT'IF a malencontreusement échoué... Merci de recommencer ultérieurement.");        
     }
+    
+    private void sendMailSuccess(Client c){
+        System.out.println("Expediteur: contact@posit.if");
+        System.out.println("Pour: "+c.getInformation().getMail());
+        System.out.println("Sujet: Bienvenue chez POSIT'IF");
+        System.out.println("Corps:");
+        System.out.println("Bonjour "+c.getFirstname()+",");
+        System.out.println("Nous vous confirmons votre inscription au service POSIT'IF. Votre numéro de client est : "+c.getIdClient());        
+    }
+    
+    private void sendNotification(Client c, Medium m){
+        System.out.println("Voyance demandée pour client "+c.getFirstname()+" "+c.getSurname()+" (#"+c.getIdClient()+"), Médium : "+m.getName());
+    }
+    
+    
      
 }

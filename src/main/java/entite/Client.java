@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Embedded;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import util.AstroTest;
@@ -46,6 +48,9 @@ public class Client implements Serializable {
     
     @Embedded
     private AstroProfile astroProfile;
+    
+    @OneToMany(mappedBy="client")
+    private List<Voyance> historiqueVoyance;
 
     public Client() {
     }
@@ -113,8 +118,14 @@ public class Client implements Serializable {
         return astroProfile;
     }
     
+    public List<Voyance> getHistorique(){
+        return this.historiqueVoyance;
+    }
     
-
+    public void addVoyance(Voyance v){
+        this.historiqueVoyance.add(v);
+    }
+    
     public void createAstroProfile(){
         //@TODO probleme avec la clef
         AstroTest at=new AstroTest("ASTRO-01-M0lGLURBU0ktQVNUUk8tQjAx");
