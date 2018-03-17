@@ -79,12 +79,13 @@ public class Employee implements Serializable {
     public void setInformation(Information information) {
         this.information = information;
     }
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idEmployee != null ? idEmployee.hashCode() : 0);
-        return hash;
+
+    public boolean isFree() {
+        return free;
+    }
+
+    public void setFree(boolean free) {
+        this.free = free;
     }
 
     @Override
@@ -99,14 +100,17 @@ public class Employee implements Serializable {
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return "Employee{" + "idEmployee=" + idEmployee + ", gender=" + gender + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + ", information=" + information + ", free=" + free + ", voyances=" + voyances + '}';
     }
-
     
     public void addVoyance(Voyance voyance){
         this.voyances.add(voyance);
+    }
+    
+    public int getNumberVoyance(){
+        return voyances.size();
     }
 }

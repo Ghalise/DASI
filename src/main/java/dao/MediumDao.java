@@ -42,12 +42,31 @@ public class MediumDao {
         return (Collection<Medium>)q.getResultList();
     }
      
-    public List<Employee> attributeEmployee(Medium m){
-        
+    public Employee attributeEmployee(Medium m){
         Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Medium med JOIN med.employees e WHERE med = :m AND e.free = true");
         q.setParameter("m", m);
-        //recuperer son  nombre de voyance grâce à la liste ! 
-        return (List<Employee>) q.getResultList();
+        List<Employee> result = q.getResultList();
+        return bestEmployee(result);
+    }
+    
+    // Permet de déterminer automatiquement l'employee disponible qui a le moins 
+    //d'affectation à partir d'une liste d'employés disponibles 
+    private Employee bestEmployee(List<Employee> l){
+        if(!l.isEmpty()){
+            Employee best= l.get(0);
+            int nbVoyance=best.getNumberVoyance();
+            Employee curr;
+            for(int i=1; i<l.size(); i++){
+                curr=l.get(i);
+                if(curr.getNumberVoyance()<nbVoyance){
+                    best=curr;
+                    nbVoyance=curr.getNumberVoyance();
+                }
+            }
+            return best;
+        }else{
+            return null;
+        }
     }
     
     public void affect(Employee e, Medium m){

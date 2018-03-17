@@ -6,11 +6,18 @@
 package entite;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 /**
@@ -25,9 +32,14 @@ public class Voyance implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idVoyance;
     
-    private int beginHour;
+    @Temporal(TemporalType.DATE)
+    private Date beginDate;
     
-    private int endHour;
+    @Temporal(TemporalType.TIME)
+    private Date beginHour;
+    
+    @Temporal(TemporalType.TIME)
+    private Date endHour;
     
     private String comment;
     
@@ -46,20 +58,26 @@ public class Voyance implements Serializable {
     public Voyance() {
     }
 
-    //?? plutôt les id et pas un client en entier ?
-
     public Voyance(Employee employee, Medium medium, Client client) {
         this.employee = employee;
         this.medium = medium;
         this.client = client;
     }
 
-    public int getBeginHour() {
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public Date getBeginHour() {
         return beginHour;
     }
 
-    public void setBeginHour(int beginHour) {
-        this.beginHour = beginHour;
+    public Date getEndHour() {
+        return endHour;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public Employee getEmployee() {
@@ -70,13 +88,6 @@ public class Voyance implements Serializable {
         return idVoyance;
     }
 
-    public int getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(int endHour) {
-        this.endHour = endHour;
-    }
 
     public String getComment() {
         return comment;
@@ -93,6 +104,36 @@ public class Voyance implements Serializable {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public void setBegin() {
+        try {
+            SimpleDateFormat d = new SimpleDateFormat ("dd/MM/yyyy" );
+            SimpleDateFormat h = new SimpleDateFormat ("hh:mm");
+            Date currentTime_1 = new Date();
+            String dateString = d.format(currentTime_1);
+            String heureString = h.format(currentTime_1);
+            Date dn = d.parse(dateString);
+            Date hn = h.parse(heureString);
+            this.beginDate = dn;
+            this.beginHour = hn;
+        } catch (ParseException ex) {
+            Logger.getLogger(Voyance.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void setEnd() {
+         try {
+            SimpleDateFormat h = new SimpleDateFormat ("hh:mm");
+            Date currentTime_1 = new Date();
+            String heureString = h.format(currentTime_1);
+            Date hn = h.parse(heureString);
+            this.endHour = hn;
+        } catch (ParseException ex) {
+            Logger.getLogger(Voyance.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
 
     @Override
     public int hashCode() {

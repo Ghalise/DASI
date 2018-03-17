@@ -5,9 +5,6 @@
  */
 package dao;
 
-import entite.Client;
-import entite.Employee;
-import entite.Medium;
 import entite.Voyance;
 
 /**
@@ -19,11 +16,18 @@ public class VoyanceDao {
     public VoyanceDao() {
     }
     
-    public void create(Client c, Medium m){
-        
-        //Voyance v = new Voyance(e,m,c);
-        //JpaUtil.obtenirEntityManager().persist(v);
+    public void create(Voyance v){
+        JpaUtil.obtenirEntityManager().persist(v);
     }
     
+    public Voyance update(Voyance v){
+        v=JpaUtil.obtenirEntityManager().merge(v);
+        return  v;
+    }
+    
+    public Voyance find(long id){
+        Voyance v=JpaUtil.obtenirEntityManager().find(Voyance.class, id);
+        return v;
+    }
     
 }

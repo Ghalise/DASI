@@ -9,7 +9,9 @@ package IHM;
 
 import dao.JpaUtil;
 import entite.Client;
+import entite.Employee;
 import entite.Information;
+import entite.Medium;
 import service.Service;
 
 
@@ -24,15 +26,20 @@ public class TestClient  {
 
     /**
      * @param args the command line arguments
-     * @throws java.text.ParseException
      */
     public static void main(String[] args) {
         JpaUtil.init();
-        //Information info=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
-        //Client c = new Client("M","benchekroun","el ghali","20/01/1997",info);
+        Information info1=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
+        Client c = new Client("M","benchekroun","el ghali","20/01/1997",info1);
         Service s=new Service();
-        s.connectClient("el.benchekroun@gmail.com", "che");
+        Employee e = s.findEmployee(1);
+        Employee e2= s.findEmployee(2);
+        Medium m= s.findMedium(53);
         //s.createClient(c);
+        Client cl= s.connectClient("elghali.benchekroun@gmail.com","ben");
+        if(cl!=null){
+            s.askForVoyance(cl, m);
+        }
         JpaUtil.destroy();
     }
     

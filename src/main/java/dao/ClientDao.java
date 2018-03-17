@@ -17,22 +17,13 @@ public class ClientDao {
     public ClientDao()
     {}
     
-    // pour creer un client dans la BD POSITIF il faut le persister grâce à notre entityManager
     public void create(Client c){
         JpaUtil.obtenirEntityManager().persist(c);
-    }
-    
-    // le client existe déjà et on veut changer ses attributs, on va donc utiliser la fonction merge de l'entityManager
-    // utilisé ?
-    public Client update(Client c){
-        c=JpaUtil.obtenirEntityManager().merge(c);
-        return  c;
     }
     
     // on va trouver un client donné grâce à sa clef (id)
     public Client find(long id){
         Client c=JpaUtil.obtenirEntityManager().find(Client.class, id);
-        
         return c;
     }
     
