@@ -69,7 +69,7 @@ public class MediumDao {
         }
     }
     
-    public void affect(Employee e, Medium m){
+    public void affectEmployee(Employee e, Medium m){
         m.addEmployee(e);
         JpaUtil.obtenirEntityManager().merge(m);
     }

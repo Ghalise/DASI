@@ -37,8 +37,11 @@ public class ClientDao {
         }        
     }
     
-    // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
-    // utilisé?
+    public Client update(Client c){
+        c=JpaUtil.obtenirEntityManager().merge(c);
+        return  c;
+    }
+    
      public Collection<Client> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT c FROM Client c");
         

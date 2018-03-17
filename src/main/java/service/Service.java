@@ -73,21 +73,14 @@ public class Service {
     }
      
     public Voyance askForVoyance(Client c, Medium m){
-        JpaUtil.creerEntityManager();
-        JpaUtil.ouvrirTransaction();
         Employee emp = getBetterEmployee(m);
         Voyance v= new Voyance (emp,m,c);
         VoyanceDao vdao= new VoyanceDao();
-        try{
-            vdao.create(v);
-            JpaUtil.validerTransaction();
-            sendNotification(c,m);
-            v.getEmployee().addVoyance(v);
-        }catch(RollbackException e){
-            JpaUtil.annulerTransaction();
-        }finally{ 
-            JpaUtil.fermerEntityManager();
-        } 
+        EmployeeDao edao= new EmployeeDao();
+        MediumDao mdao= new MediumDao();
+        v.getEmployee().addVoyance(v);
+        v.getMedium().addEmployee(emp);
+        sendNotification(c,m);
         return v;
     }
         
@@ -149,6 +142,7 @@ public class Service {
         JpaUtil.ouvrirTransaction();
         VoyanceDao vdao= new VoyanceDao();
         EmployeeDao edao= new EmployeeDao();
+        ClientDao cdao=new ClientDao();
         Employee emp= v.getEmployee();
         Voyance newVoyance=null;
         try{
@@ -157,6 +151,7 @@ public class Service {
             emp.setFree(false);
             edao.update(emp);
             v.getClient().addVoyance(v);
+            cdao.update(v.getClient());
             JpaUtil.validerTransaction();
         }catch(RollbackException e){
             JpaUtil.annulerTransaction();
@@ -222,7 +217,7 @@ public class Service {
         JpaUtil.ouvrirTransaction();
         MediumDao md= new MediumDao();
         try{
-            md.affect(emp,m);
+            md.affectEmployee(emp,m);
             JpaUtil.validerTransaction();
         }catch(Exception e){
             JpaUtil.annulerTransaction();
@@ -232,7 +227,7 @@ public class Service {
     }
     
     //Permet de récupérer l'employee qui a le moins de voyances
-    public Employee getBetterEmployee(Medium m)
+    private Employee getBetterEmployee(Medium m)
     {
         JpaUtil.creerEntityManager();
         MediumDao md= new MediumDao();
