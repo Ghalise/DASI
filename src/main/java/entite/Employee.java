@@ -103,7 +103,7 @@ public class Employee implements Serializable {
     
     @Override
     public String toString() {
-        return "Employee{" + "idEmployee=" + idEmployee + ", gender=" + gender + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + ", information=" + information + ", free=" + free + ", voyances=" + voyances + '}';
+        return "Employee{" + "idEmployee=" + idEmployee + ", gender=" + gender + ", surname=" + surname + ", firstname=" + firstname + ", birthDate=" + birthDate + ", information=" + information + ", free=" + free + '}';
     }
     
     public void addVoyance(Voyance voyance){
@@ -113,4 +113,5 @@ public class Employee implements Serializable {
     public int getNumberVoyance(){
         return voyances.size();
     }
+   
 }

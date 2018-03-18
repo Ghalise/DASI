@@ -36,7 +36,6 @@ public class MediumDao {
     }
     
     // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
-    // utilisé?
      public Collection<Medium> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT m FROM Medium m");
         return (Collection<Medium>)q.getResultList();
@@ -46,12 +45,12 @@ public class MediumDao {
         Query q = JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Medium med JOIN med.employees e WHERE med = :m AND e.free = true");
         q.setParameter("m", m);
         List<Employee> result = q.getResultList();
-        return bestEmployee(result);
+        return bestEmployee(result,m);
     }
     
     // Permet de déterminer automatiquement l'employee disponible qui a le moins 
     //d'affectation à partir d'une liste d'employés disponibles 
-    private Employee bestEmployee(List<Employee> l){
+    private Employee bestEmployee(List<Employee> l, Medium m){
         if(!l.isEmpty()){
             Employee best= l.get(0);
             int nbVoyance=best.getNumberVoyance();
@@ -65,12 +64,30 @@ public class MediumDao {
             }
             return best;
         }else{
-            return null;
+            List<Employee> lbis= findAllFreeEmployee();
+            Employee best= lbis.get(0);
+            int nbVoyance=best.getNumberVoyance();
+            Employee curr;
+            for(int i=1; i<lbis.size(); i++){
+                curr=lbis.get(i);
+                if(curr.getNumberVoyance()<nbVoyance){
+                    best=curr;
+                    nbVoyance=curr.getNumberVoyance();
+                }
+            }
+            affectEmployee(best,m);
+            return best;
         }
     }
     
     public void affectEmployee(Employee e, Medium m){
         m.addEmployee(e);
         JpaUtil.obtenirEntityManager().merge(m);
+    }
+    
+     // execution d'une requête qui va nous donner tous les employes contenus dans la BD POSITIF
+     private List<Employee> findAllFreeEmployee(){
+        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employee e WHERE e.free = true");
+        return (List<Employee>)q.getResultList();
     }
 }

@@ -49,7 +49,7 @@ public class Client implements Serializable {
     @Embedded
     private AstroProfile astroProfile;
     
-    @OneToMany(mappedBy="client")
+    @OneToMany
     private List<Voyance> historiqueVoyance;
 
     public Client() {

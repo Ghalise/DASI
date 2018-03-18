@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -54,7 +55,7 @@ public class Voyance implements Serializable {
     
     @Version
     private int version;
-
+    
     public Voyance() {
     }
 
@@ -157,7 +158,9 @@ public class Voyance implements Serializable {
 
     @Override
     public String toString() {
-        return "Voyance{" + "idVoyance=" + idVoyance + ", beginHour=" + beginHour + ", endHour=" + endHour + ", comment=" + comment + ", employee=" + employee + ", medium=" + medium + ", client=" + client + '}';
+        return "Voyance{" + "beginDate=" + beginDate + ", beginHour=" + beginHour + ", endHour=" + endHour + ", comment=" + comment + ", employee=" + employee + ", client=" + client + ", version=" + version + '}';
     }
+    
+    
     
 }

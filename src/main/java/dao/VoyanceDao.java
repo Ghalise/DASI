@@ -5,7 +5,10 @@
  */
 package dao;
 
+import entite.Client;
 import entite.Voyance;
+import java.util.Collection;
+import javax.persistence.Query;
 
 /**
  *
@@ -30,4 +33,9 @@ public class VoyanceDao {
         return v;
     }
     
+    public Collection<Voyance> getHistoriqueClient(Client c){
+        Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT v FROM Voyance v WHERE v.client =:client ");
+        q.setParameter("client", c);
+        return (Collection<Voyance>)q.getResultList();
+    }
 }

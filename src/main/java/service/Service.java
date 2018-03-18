@@ -12,6 +12,7 @@ import dao.JpaUtil;
 import dao.MediumDao;
 import dao.VoyanceDao;
 import entite.AstroProfile;
+import entite.ClientVoyance;
 import entite.Employee;
 import entite.Medium;
 import entite.Voyance;
@@ -26,10 +27,13 @@ import util.AstroTest;
  */
 public class Service {
     
-    // utile de penser la classe service comme un objet car on pourrait avoir des attributs à l'avenir (ex : langue utilisateur)
+    // utile de penser la classe service comme un objet car on pourrait avoir 
+    //des attributs à l'avenir (ex : langue utilisateur)
     public Service(){}
     
-    //**************** SERVICES CLIENT ****************
+   /*-------------------------------------------------------------------------*/ 
+   //********************** SERVICES CLIENTS *********************************//
+   /*-------------------------------------------------------------------------*/
     
     //Service pour enregistrer un nouveau client dans l'application
     public void createClient(Client c)
@@ -71,20 +75,53 @@ public class Service {
         JpaUtil.fermerEntityManager();
         return m;
     }
-     
+    
+    //Service pour le client puisse faire une demande de voyance avec le médium
+    //qu'il a choisi (Gestion de la concurrence, on laisse la possibilité de 
+    //recommencer la transaction 3 fois)
     public Voyance askForVoyance(Client c, Medium m){
-        Employee emp = getBetterEmployee(m);
-        Voyance v= new Voyance (emp,m,c);
-        VoyanceDao vdao= new VoyanceDao();
-        EmployeeDao edao= new EmployeeDao();
-        MediumDao mdao= new MediumDao();
-        v.getEmployee().addVoyance(v);
-        v.getMedium().addEmployee(emp);
-        sendNotification(c,m);
+        JpaUtil.creerEntityManager();
+        if (c==null || m==null){
+            return null;
+        }
+        boolean repeatTransaction= true;
+        int nbRepeat=0;
+        Voyance v= null;
+        VoyanceDao vdao=new VoyanceDao();
+        while ((repeatTransaction)&&(nbRepeat<3)){
+            try{
+                Employee emp = getBetterEmployee(m);
+                v= new Voyance (emp,m,c);
+                JpaUtil.ouvrirTransaction();
+                vdao.create(v);
+                //v.getEmployee().addVoyance(v);
+                v.getMedium().addEmployee(emp);
+                JpaUtil.validerTransaction();
+                sendNotification(c,m);
+                repeatTransaction=false;
+            }catch(RollbackException e){
+                JpaUtil.annulerTransaction();
+                repeatTransaction=true;
+                nbRepeat++;
+            }
+        }
+        JpaUtil.fermerEntityManager();  
         return v;
     }
+    
+    //Service pour le client pour qu'il puisse consulter l'historique des demandes
+    //de voyances qu'il a fait
+    public List<Voyance> historicForClient (Client c){
+        c.getHistorique().isEmpty();
+        return c.getHistorique();
+    }
         
-    //**************** SERVICES EMPLOYE ****************
+   /*-------------------------------------------------------------------------*/ 
+   //********************* SERVICES EMPLOYES *********************************//
+   /*-------------------------------------------------------------------------*/
+   
+    
+     //Service pour creation (en dur seulement) d'un employé
     public void createEmployee(Employee emp)
     {
         JpaUtil.creerEntityManager();
@@ -100,6 +137,7 @@ public class Service {
         }  
     }
     
+    //Service pour trouver (en dur seulement) un employé à partir de son id
     public Employee findEmployee (long id){
         JpaUtil.creerEntityManager();
         EmployeeDao cd= new EmployeeDao();
@@ -108,6 +146,7 @@ public class Service {
         return emp;
     }
     
+    //Service pour qu'un client puisse se connecter dans l'application
     public Employee connectEmployee(String mail, String password){
         JpaUtil.creerEntityManager();
         EmployeeDao ed= new EmployeeDao();
@@ -137,6 +176,7 @@ public class Service {
         return at.getPredictions(c.getAstroProfile().getColor(),c.getAstroProfile().getColor(),amour, sante, travail);
     }
     
+    //Service pour pouvoir débuter une voyance
     public Voyance beginVoyance(Voyance v){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -161,6 +201,7 @@ public class Service {
         return newVoyance;
     }
     
+    //Service pour cloturer une voyance
     public void closeVoyance(Voyance v, String comments){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -186,8 +227,21 @@ public class Service {
         return c.getAstroProfile();
     }
     
+    //Service pour l'employé puisse consulter l'historique des voyances que le 
+    //client a effectué
+    public List<Voyance> getHistoricOfClient (Client c){
+        JpaUtil.creerEntityManager();
+        VoyanceDao vdao= new VoyanceDao();
+        List<Voyance> lv= (List<Voyance>) vdao.getHistoriqueClient(c);
+        JpaUtil.fermerEntityManager();
+        return lv;
+    }
     
-   //**************** SERVICES MEDIUM ****************
+   /*-------------------------------------------------------------------------*/ 
+   //*********************** SERVICES MEDIUM *********************************//
+   /*-------------------------------------------------------------------------*/
+   
+    //Service pour creation (en dur seulement) d'un médium
     public void createMedium(Medium m)
     {
         JpaUtil.creerEntityManager();
@@ -203,6 +257,7 @@ public class Service {
         }  
     }
     
+    //Service pour trouver (en dur seulement) un médium à partir de son id
     public Medium findMedium (long id){
         JpaUtil.creerEntityManager();
         MediumDao cd= new MediumDao();
@@ -211,6 +266,8 @@ public class Service {
         return m;
     }
     
+    //Service qui permet de définir explicitement quels sont les médiums qu'un
+    //employé peut incarner
     public void affectEmployee(Employee emp, Medium m)
     {
         JpaUtil.creerEntityManager();
@@ -224,16 +281,6 @@ public class Service {
         }finally{ 
             JpaUtil.fermerEntityManager();
         }  
-    }
-    
-    //Permet de récupérer l'employee qui a le moins de voyances
-    private Employee getBetterEmployee(Medium m)
-    {
-        JpaUtil.creerEntityManager();
-        MediumDao md= new MediumDao();
-        Employee e=md.attributeEmployee(m);
-        JpaUtil.fermerEntityManager();
-        return e;
     }
 
     //**************** SERVICES COMPLEMENTAIRES ****************
@@ -260,6 +307,13 @@ public class Service {
         System.out.println("Voyance demandée pour client "+c.getFirstname()+" "+c.getSurname()+" (#"+c.getIdClient()+"), Médium : "+m.getName());
     }
     
+    //Permet de récupérer l'employee qui a le moins de voyances
+    private Employee getBetterEmployee(Medium m)
+    {
+        MediumDao md= new MediumDao();
+        Employee e=md.attributeEmployee(m);
+        return e;
+    }
     
      
 }
