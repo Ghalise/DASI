@@ -18,7 +18,10 @@ import entite.Medium;
 import entite.Voyance;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javafx.util.Pair;
 import javax.persistence.RollbackException;
 import util.AstroTest;
 /**
@@ -80,26 +83,44 @@ public class Service {
     //qu'il a choisi (Gestion de la concurrence, on laisse la possibilité de 
     //recommencer la transaction 3 fois)
     public Voyance askForVoyance(Client c, Medium m){
+        
         JpaUtil.creerEntityManager();
         if (c==null || m==null){
             return null;
         }
+        
         boolean repeatTransaction= true;
         int nbRepeat=0;
         Voyance v= null;
+        
+        List<Employee> emps=m.getEmployees();
+        
+        Employee e=null;
+        Integer size=Integer.MAX_VALUE;
+        
+        for(Employee emp : emps){
+           
+            int sTemp=emp.getNumberVoyance();
+            if(sTemp<size && emp.isFree()){
+                e=emp;
+                size=sTemp;
+            }
+        }
+        if(e==null){ return null; }
+        
         VoyanceDao vdao=new VoyanceDao();
+        EmployeeDao ed= new EmployeeDao();
         while ((repeatTransaction)&&(nbRepeat<3)){
             try{
-                Employee emp = getBetterEmployee(m);
-                v= new Voyance (emp,m,c);
+                repeatTransaction= false;
                 JpaUtil.ouvrirTransaction();
+                v=new Voyance(e,m,c);
                 vdao.create(v);
-                //v.getEmployee().addVoyance(v);
-                v.getMedium().addEmployee(emp);
+                e.addVoyance(v);
+                ed.update(e);
+                sendNotification(c, m);
                 JpaUtil.validerTransaction();
-                sendNotification(c,m);
-                repeatTransaction=false;
-            }catch(RollbackException e){
+            }catch(RollbackException ex){
                 JpaUtil.annulerTransaction();
                 repeatTransaction=true;
                 nbRepeat++;
@@ -108,6 +129,7 @@ public class Service {
         JpaUtil.fermerEntityManager();  
         return v;
     }
+
     
     //Service pour le client pour qu'il puisse consulter l'historique des demandes
     //de voyances qu'il a fait
@@ -176,44 +198,45 @@ public class Service {
         return at.getPredictions(c.getAstroProfile().getColor(),c.getAstroProfile().getColor(),amour, sante, travail);
     }
     
-    //Service pour pouvoir débuter une voyance
-    public Voyance beginVoyance(Voyance v){
+        //Service pour pouvoir dÃ©buter une voyance
+    public Voyance beginVoyance(long idVoy){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
         VoyanceDao vdao= new VoyanceDao();
+        Voyance v=vdao.find(idVoy);
+        if(v==null){ return null;}
+        
         EmployeeDao edao= new EmployeeDao();
-        ClientDao cdao=new ClientDao();
-        Employee emp= v.getEmployee();
-        Voyance newVoyance=null;
+        Employee emp=v.getEmployee();
         try{
-            v.setBegin();
-            newVoyance=vdao.update(v);
             emp.setFree(false);
             edao.update(emp);
-            v.getClient().addVoyance(v);
-            cdao.update(v.getClient());
+            v.setBegin();
+            vdao.update(v);
             JpaUtil.validerTransaction();
         }catch(RollbackException e){
             JpaUtil.annulerTransaction();
         }finally{ 
             JpaUtil.fermerEntityManager();
         } 
-        return newVoyance;
+        return v; 
     }
     
     //Service pour cloturer une voyance
-    public void closeVoyance(Voyance v, String comments){
+    public void closeVoyance(long idVoy, String comments){
+        
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
         VoyanceDao vdao= new VoyanceDao();
+        Voyance v=vdao.find(idVoy);
         EmployeeDao edao= new EmployeeDao();
         Employee emp= v.getEmployee();
         try{
+            emp.setFree(true);
+            edao.update(emp);
             v.setEnd();
             v.setComment(comments);
             vdao.update(v);
-            emp.setFree(true);
-            edao.update(emp);
             JpaUtil.validerTransaction();
         }catch(RollbackException e){
             JpaUtil.annulerTransaction();
@@ -221,6 +244,7 @@ public class Service {
             JpaUtil.fermerEntityManager();
         } 
     }
+
     
     //Service pour que l'employe puisse accéder au profil Astrologique d'un client
     public AstroProfile displayAstroprofile (Client c){
@@ -235,6 +259,42 @@ public class Service {
         List<Voyance> lv= (List<Voyance>) vdao.getHistoriqueClient(c);
         JpaUtil.fermerEntityManager();
         return lv;
+    }
+    
+    public HashMap<Long, Integer> voyanceByMedium(){
+        HashMap<Long,Integer> hmap;
+        hmap = new HashMap();
+       
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        MediumDao md= new MediumDao();
+        VoyanceDao vd=new VoyanceDao();
+        try{
+            Collection<Medium> lm=md.findAll();
+            for(Medium m:lm){
+                hmap.put(m.getIdMedium(), vd.findAll(m).size());
+            }
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{
+            JpaUtil.fermerEntityManager();
+        }
+        return hmap;
+    }
+    
+    public Map<Employee,Pair<Long,Float>> voyanceByEmployee(){
+        JpaUtil.creerEntityManager();
+        EmployeeDao eDAO = new EmployeeDao();
+        List<Employee> emp = (List<Employee>) eDAO.findAll();
+        HashMap<Employee,Pair<Long,Float>> res = new HashMap<Employee,Pair<Long,Float>>();
+        try{
+        res = eDAO.statEmployee(emp);
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        JpaUtil.fermerEntityManager();
+        return res;
     }
     
    /*-------------------------------------------------------------------------*/ 

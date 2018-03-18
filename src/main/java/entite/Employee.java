@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 
 /**
@@ -49,6 +50,9 @@ public class Employee implements Serializable {
     
     @OneToMany(mappedBy="employee")
     private List<Voyance> voyances;
+    
+    @Version
+    private int version;
 
     public Employee() {
     }
@@ -95,10 +99,7 @@ public class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.idEmployee == null && other.idEmployee != null) || (this.idEmployee != null && !this.idEmployee.equals(other.idEmployee))) {
-            return false;
-        }
-        return true;
+        return !((this.idEmployee == null && other.idEmployee != null) || (this.idEmployee != null && !this.idEmployee.equals(other.idEmployee)));
     }
     
     @Override
@@ -113,5 +114,5 @@ public class Employee implements Serializable {
     public int getNumberVoyance(){
         return voyances.size();
     }
-   
+    
 }

@@ -7,6 +7,9 @@ package dao;
 
 import entite.Employee;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import javafx.util.Pair;
 import javax.persistence.Query;
 /**
  *
@@ -25,9 +28,10 @@ public class EmployeeDao {
     // le client existe déjà et on veut changer ses attributs, on va donc utiliser la fonction merge de l'entityManager
     // utilisé ?
     public Employee update(Employee e){
-        e=JpaUtil.obtenirEntityManager().merge(e);
-        
-        return  e;
+        JpaUtil.obtenirEntityManager().merge(e);
+        long id=e.getId();
+        Employee emp = find(id);
+        return  emp;
     }
     
     // on va trouver un client donné grâce à sa clef (id)
@@ -46,10 +50,28 @@ public class EmployeeDao {
         }        
     }
     
-    // execution d'une requête qui va nous donner tous les clients contenus dans la BD POSITIF
-    // utilisé?
+    // execution d'une requête qui va nous donner tous les employes contenus dans la BD POSITIF
      public Collection<Employee> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT e FROM Employee e");
         return (Collection<Employee>)q.getResultList();
     }
+    
+    public HashMap<Employee,Pair<Long,Float>> statEmployee(List<Employee> emp){
+        HashMap<Employee,Pair<Long,Float>> mapRes = new HashMap<>();
+        long total = 0;
+        Query q = JpaUtil.obtenirEntityManager().createQuery("select count(v) from Voyance v");
+        total = (Long) q.getSingleResult();
+        if(total != 0){
+            for(Employee empe : emp){
+                q = JpaUtil.obtenirEntityManager().createQuery("select v from Voyance v where v.employee = :emp");
+                q.setParameter("emp", empe);
+                long nbConsultation = (long)q.getResultList().size();
+                float pourcentage = (100*(nbConsultation))/total;
+                Pair<Long,Float> paire = new Pair<>(nbConsultation,pourcentage);
+                mapRes.putIfAbsent(empe, paire);
+            }
+        }
+        return mapRes;
+    }
+     
 }

@@ -34,7 +34,7 @@ public class TestClient  {
         JpaUtil.init();
         
         Service s=new Service();
-        
+//        
 //        Information info1=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
 //        Client c = new Client("M","benchekroun","el ghali","20/01/1997",info1);
 //        s.createClient(c);
@@ -56,6 +56,7 @@ public class TestClient  {
 //        s.affectEmployee(e2, b);
 //        s.affectEmployee(e, a);
 //        s.affectEmployee(e, i);
+        
         Medium a = s.findMedium(6);
         Employee e=s.findEmployee(2);
         Medium b= s.findMedium(5);
@@ -63,15 +64,10 @@ public class TestClient  {
         Client cl= s.connectClient("elghali.benchekroun@gmail.com","ben");
         if(cl!=null){
             Voyance v1=s.askForVoyance(cl,a);
-            Voyance v2=s.askForVoyance(cl,b);
-            Voyance v3=s.askForVoyance(cl,a);
-            v1=s.beginVoyance(v1);
-            v2=s.beginVoyance(v2);
-            v3=s.beginVoyance(v3);
-            s.closeVoyance(v3, "caca");
-            s.closeVoyance(v2, "caca");
-            s.closeVoyance(v1, "caca");
-            System.out.println(s.historicForClient(cl));
+            v1=s.beginVoyance(v1.getIdVoyance());
+            s.closeVoyance(v1.getIdVoyance(), "caca");
+            System.out.println(s.voyanceByEmployee());
+            System.out.println(s.voyanceByMedium());
         }
         JpaUtil.destroy();
         
