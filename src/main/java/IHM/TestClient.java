@@ -47,7 +47,7 @@ public class TestClient  {
         Employee emp= s.connectEmployee("poe.dameron@gmail.com", "resistance");
         
         Medium m=s.findMedium(13);
-        
+        s.getHistoryOfClient(cl);
         if(cl!=null){
             Voyance v1;
             try {

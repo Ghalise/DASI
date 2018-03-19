@@ -302,7 +302,7 @@ public class Service {
         return hmap;
     }
     
-    public Map<Employee,Pair<Long,Float>> voyanceByEmployee(){
+    public HashMap<Employee,Pair<Long,Float>> voyanceByEmployee(){
         JpaUtil.creerEntityManager();
         EmployeeDao eDAO = new EmployeeDao();
         List<Employee> emp = (List<Employee>) eDAO.findAll();
