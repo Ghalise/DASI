@@ -12,7 +12,6 @@ import dao.JpaUtil;
 import dao.MediumDao;
 import dao.VoyanceDao;
 import entite.AstroProfile;
-import entite.ClientVoyance;
 import entite.Employee;
 import entite.Medium;
 import entite.Voyance;
@@ -53,8 +52,7 @@ public class Service {
             sendMailFail(c);
         }finally{ 
             JpaUtil.fermerEntityManager();
-        }  
-       
+        }    
     }
     
     //Service pour qu'un client puisse se connecter dans l'application
@@ -62,9 +60,10 @@ public class Service {
         JpaUtil.creerEntityManager();
         ClientDao cd= new ClientDao();
         Client c=cd.findByMail(mail);
-        if(!c.getInformation().getPassword().equals(password)){
-            System.out.println(c.getInformation().getPassword());
-            c=null;
+        if(c!=null){
+            if(!c.getInformation().getPassword().equals(password)){
+                c=null;
+            }
         }
         JpaUtil.fermerEntityManager();
         return c;
@@ -133,9 +132,15 @@ public class Service {
     
     //Service pour le client pour qu'il puisse consulter l'historique des demandes
     //de voyances qu'il a fait
-    public List<Voyance> historicForClient (Client c){
+    public List<String> historyForClient (Client c){
         c.getHistorique().isEmpty();
-        return c.getHistorique();
+        List <Voyance> voyancesClient= c.getHistorique();
+        List <String> voyances;
+        for (Voyance v: voyancesClient){
+            String s= v.getMedium()+", le "+v.getBeginDate()+", durée: "+v.getDuration();
+            voyances.add(s);
+        }
+        return voyances;
     }
         
    /*-------------------------------------------------------------------------*/ 
@@ -173,8 +178,10 @@ public class Service {
         JpaUtil.creerEntityManager();
         EmployeeDao ed= new EmployeeDao();
         Employee e=ed.findByMail(mail);
-        if(e.getInformation().getPassword().equals(password)){
-            e=null;
+        if(e!=null){
+            if(!e.getInformation().getPassword().equals(password)){
+                e=null;
+            }
         }
         JpaUtil.fermerEntityManager();
         return e;
@@ -198,7 +205,7 @@ public class Service {
         return at.getPredictions(c.getAstroProfile().getColor(),c.getAstroProfile().getColor(),amour, sante, travail);
     }
     
-        //Service pour pouvoir dÃ©buter une voyance
+    //Service pour pouvoir débuter une voyance
     public Voyance beginVoyance(long idVoy){
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -222,6 +229,24 @@ public class Service {
         return v; 
     }
     
+     //Service pour pouvoir finir une voyance
+    public void endVoyance(long idVoy, String comments){
+        
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        VoyanceDao vdao= new VoyanceDao();
+        Voyance v=vdao.find(idVoy);
+        try{
+            v.setEnd();
+            vdao.update(v);
+            JpaUtil.validerTransaction();
+        }catch(RollbackException e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        } 
+    }
+        
     //Service pour cloturer une voyance
     public void closeVoyance(long idVoy, String comments){
         
@@ -234,7 +259,6 @@ public class Service {
         try{
             emp.setFree(true);
             edao.update(emp);
-            v.setEnd();
             v.setComment(comments);
             vdao.update(v);
             JpaUtil.validerTransaction();
@@ -253,7 +277,7 @@ public class Service {
     
     //Service pour l'employé puisse consulter l'historique des voyances que le 
     //client a effectué
-    public List<Voyance> getHistoricOfClient (Client c){
+    public List<Voyance> getHistoryOfClient (Client c){
         JpaUtil.creerEntityManager();
         VoyanceDao vdao= new VoyanceDao();
         List<Voyance> lv= (List<Voyance>) vdao.getHistoriqueClient(c);

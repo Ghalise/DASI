@@ -86,12 +86,16 @@ public class Client implements Serializable {
         this.firstname = firstname;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getBirthDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String date = sdf.format(this.birthDate);
+        return date;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(String birthDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date dn = sdf.parse(birthDate);
+        this.birthDate = dn;
     }
 
     public Long getIdClient() {
