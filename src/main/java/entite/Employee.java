@@ -1,6 +1,4 @@
-/*
- * La classe Client permet d'implémenter un client, de demander une voyance, d'accéder au profil astrologique ou aux coordonnées du client.
- */
+
 package entite;
 
 import java.io.Serializable;
@@ -21,10 +19,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 
-/**
- *
- * @author erouille
- */
 @Entity
 public class Employee implements Serializable {
 
@@ -134,7 +128,6 @@ public class Employee implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Client)) {
             return false;
         }

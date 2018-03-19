@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package service;
 
 import entite.Client;
@@ -23,10 +19,7 @@ import java.util.Map;
 import javafx.util.Pair;
 import javax.persistence.RollbackException;
 import util.AstroTest;
-/**
- *
- * @author erouille
- */
+
 public class Service {
     
     // utile de penser la classe service comme un objet car on pourrait avoir 
@@ -88,6 +81,8 @@ public class Service {
             return null;
         }
         
+        boolean repeatTransaction= true;
+        int nbRepeat=0;
         Voyance v= null;
         
         List<Employee> emps=m.getEmployees();
@@ -107,17 +102,21 @@ public class Service {
         
         VoyanceDao vdao=new VoyanceDao();
         EmployeeDao ed= new EmployeeDao();
-        
-        try{
-            JpaUtil.ouvrirTransaction();
-            v=new Voyance(e,m,c);
-            vdao.create(v);
-            e.addVoyance(v);
-            ed.update(e);
-            sendNotification(c, m);
-            JpaUtil.validerTransaction();
-        }catch(RollbackException ex){
-            JpaUtil.annulerTransaction();
+        while ((repeatTransaction)&&(nbRepeat<3)){
+            try{
+                repeatTransaction= false;
+                JpaUtil.ouvrirTransaction();
+                v=new Voyance(e,m,c);
+                vdao.create(v);
+                e.addVoyance(v);
+                c.addVoyance(v);
+                ed.update(e);
+                cd.update(c);
+                sendNotification(c, m);
+                JpaUtil.validerTransaction();
+            }catch(RollbackException ex){
+                JpaUtil.annulerTransaction();
+            }
         }
         JpaUtil.fermerEntityManager();  
         return v;
@@ -224,7 +223,7 @@ public class Service {
     }
     
      //Service pour pouvoir finir une voyance
-    public void endVoyance(long idVoy, String comments){
+    public Voyance endVoyance(long idVoy){
         
         JpaUtil.creerEntityManager();
         JpaUtil.ouvrirTransaction();
@@ -238,7 +237,8 @@ public class Service {
             JpaUtil.annulerTransaction();
         }finally{ 
             JpaUtil.fermerEntityManager();
-        } 
+        }
+        return v;
     }
         
     //Service pour cloturer une voyance
@@ -344,6 +344,22 @@ public class Service {
         return m;
     }
     
+    //Service qui permet de définir explicitement quels sont les médiums qu'un
+    //employé peut incarner
+    public void affectEmployee(Employee emp, Medium m)
+    {
+        JpaUtil.creerEntityManager();
+        JpaUtil.ouvrirTransaction();
+        MediumDao md= new MediumDao();
+        try{
+            md.affectEmployee(emp,m);
+            JpaUtil.validerTransaction();
+        }catch(Exception e){
+            JpaUtil.annulerTransaction();
+        }finally{ 
+            JpaUtil.fermerEntityManager();
+        }  
+    }
 
     //**************** SERVICES COMPLEMENTAIRES ****************
     
@@ -367,14 +383,6 @@ public class Service {
     
     private void sendNotification(Client c, Medium m){
         System.out.println("Voyance demandée pour client "+c.getFirstname()+" "+c.getSurname()+" (#"+c.getIdClient()+"), Médium : "+m.getName());
-    }
-    
-    //Permet de récupérer l'employee qui a le moins de voyances
-    private Employee getBetterEmployee(Medium m)
-    {
-        MediumDao md= new MediumDao();
-        Employee e=md.attributeEmployee(m);
-        return e;
     }
     
      

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package IHM;
 
 import dao.JpaUtil;
@@ -82,48 +78,6 @@ public class GenerateEmployee {
         TarotReader m6 = new TarotReader("Insaisissables Squad","Voir c'est croire; mais ce que l'on voit est-il réel? Ce n'est qu'une question de point de vue.", "Cambriolages","Illusions");
         FortuneTeller m7= new FortuneTeller("Yoda","Difficile à voir. Toujours en mouvement est l'avenir.","La force");
         
-        
-        m1.addEmployee(e1);
-        m2.addEmployee(e1);
-        m3.addEmployee(e1);
-        m4.addEmployee(e1);
-        
-        m4.addEmployee(e2);
-        m5.addEmployee(e2);
-        m6.addEmployee(e2);
-        m7.addEmployee(e2);
-        
-        m2.addEmployee(e3);
-        m4.addEmployee(e3);
-        m5.addEmployee(e3);
-        
-        m1.addEmployee(e4);
-        m6.addEmployee(e4);
-        m4.addEmployee(e4);
-        
-        m1.addEmployee(e5);
-        m3.addEmployee(e5);
-        m5.addEmployee(e5);
-        m7.addEmployee(e5);
-        
-        m4.addEmployee(e6);
-        m2.addEmployee(e6);
-        
-        m3.addEmployee(e7);
-        
-        m5.addEmployee(e9);
-        m6.addEmployee(e9);
-        m7.addEmployee(e9);
-        m1.addEmployee(e8);
-        
-        m3.addEmployee(e10);
-        m4.addEmployee(e10);
-        
-        m7.addEmployee(e11);
-        
-        m1.addEmployee(e12);
-        
-        
         s.createMedium(m1);
         s.createMedium(m2);
         s.createMedium(m3);
@@ -131,6 +85,46 @@ public class GenerateEmployee {
         s.createMedium(m5);
         s.createMedium(m6);
         s.createMedium(m7);
+        
+        s.affectEmployee(e1, m1);
+        s.affectEmployee(e1, m2);
+        s.affectEmployee(e1, m3);
+        s.affectEmployee(e1, m4);
+        
+        s.affectEmployee(e2, m4);
+        s.affectEmployee(e2, m5);
+        s.affectEmployee(e2, m6);
+        s.affectEmployee(e2, m7);
+        
+        s.affectEmployee(e3, m2);
+        s.affectEmployee(e3, m4);
+        s.affectEmployee(e3, m6);
+        
+        s.affectEmployee(e4, m6);
+        s.affectEmployee(e4, m5);
+        s.affectEmployee(e4, m3);
+        
+        s.affectEmployee(e5, m1);
+        s.affectEmployee(e5, m3);
+        s.affectEmployee(e5, m5);
+        s.affectEmployee(e5, m7);
+        
+        s.affectEmployee(e6, m2);
+        s.affectEmployee(e6, m7);
+        
+        s.affectEmployee(e7, m1);
+        
+        s.affectEmployee(e8, m5);
+        s.affectEmployee(e8, m6);
+        s.affectEmployee(e8, m3);
+        s.affectEmployee(e8, m4);
+        
+        s.affectEmployee(e10, m2);
+        s.affectEmployee(e10, m7);
+        
+        s.affectEmployee(e11, m7);
+        
+        s.affectEmployee(e12, m1); 
         
         List<Employee> list=s.findMedium(m1.getIdMedium()).getEmployees();
         for(Employee emp:list){

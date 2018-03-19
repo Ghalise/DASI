@@ -1,6 +1,4 @@
-/*
- * La classe Client permet d'implémenter un client, de demander une voyance, d'accéder au profil astrologique ou aux coordonnées du client.
- */
+
 package entite;
 
 import java.io.IOException;
@@ -21,10 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import util.AstroTest;
 
-/**
- *
- * @author erouille
- */
+
 @Entity
 public class Client implements Serializable {
 

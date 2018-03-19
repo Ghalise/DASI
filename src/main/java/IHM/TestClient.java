@@ -15,6 +15,9 @@ import entite.FortuneTeller;
 import entite.Information;
 import entite.Medium;
 import entite.Voyance;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import service.EmployeeIsNotFree;
 import service.Service;
 
 
@@ -34,38 +37,28 @@ public class TestClient  {
         JpaUtil.init();
         
         Service s=new Service();
-//        
-//        Information info1=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
-//        Client c = new Client("M","benchekroun","el ghali","20/01/1997",info1);
-//        s.createClient(c);
-//        
-//        Information info=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
-//        Employee e = new Employee("M", "Lapin", "Jeannot","01/01/2018", info);
-//        Information info2=new Information("random@gmail.com","ran","0664170706","dom");
-//        Employee e2 = new Employee("M", "Ran", "Dom","05/01/2008", info2);
-//        s.createEmployee(e);
-//        s.createEmployee(e2);
-//        
-//        FortuneTeller i = new FortuneTeller("Irma", "Raconte n'importe quoi", "Poissons morts");
-//        FortuneTeller b = new FortuneTeller("Bouldingue", "Invente des mots pour paraitre intelligent", "Kinder Bueno");
-//        Astrologer a = new Astrologer("As", "Se croit superieur a tout le monde", "AstroMag", "1945");
-//        s.createMedium(i);
-//        s.createMedium(b);
-//        s.createMedium(a);
-//        s.affectEmployee(e2, a);
-//        s.affectEmployee(e2, b);
-//        s.affectEmployee(e, a);
-//        s.affectEmployee(e, i);
         
-        Medium a = s.findMedium(6);
-        Employee e=s.findEmployee(2);
-        Medium b= s.findMedium(5);
+        Information info1=new Information("elghali.benchekroun@gmail.com","elghali","0664170706","ben");
+        Client c = new Client("M","benchekroun","el ghali","20/01/1997",info1);
+        s.createClient(c);
         
         Client cl= s.connectClient("elghali.benchekroun@gmail.com","ben");
+        
+        Employee emp= s.connectEmployee("poe.dameron@gmail.com", "resistance");
+        
+        Medium m=s.findMedium(13);
+        
         if(cl!=null){
-            Voyance v1=s.askForVoyance(cl,a);
-            v1=s.beginVoyance(v1.getIdVoyance());
-            s.closeVoyance(v1.getIdVoyance(), "caca");
+            Voyance v1;
+            try {
+                v1 = s.askForVoyance(cl,m);
+                v1=s.beginVoyance(v1.getIdVoyance());
+                v1=s.endVoyance(v1.getIdVoyance());
+                s.closeVoyance(v1.getIdVoyance(), "Facile a arnaquer !");
+            } catch (EmployeeIsNotFree ex) {
+                Logger.getLogger(TestClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
             System.out.println(s.voyanceByEmployee());
             System.out.println(s.voyanceByMedium());
         }

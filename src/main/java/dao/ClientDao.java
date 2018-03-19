@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dao;
 
 import entite.Client;
 import java.util.Collection;
 import javax.persistence.Query;
-/**
- *
- * @author erouille
- */
+
+
 public class ClientDao { 
     
     public ClientDao()
@@ -21,12 +14,13 @@ public class ClientDao {
         JpaUtil.obtenirEntityManager().persist(c);
     }
     
-    // on va trouver un client donné grâce à sa clef (id)
+    //find a client with his key (id)
     public Client find(long id){
         Client c=JpaUtil.obtenirEntityManager().find(Client.class, id);
         return c;
     }
     
+    //authentication
     public Client findByMail(String email){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT c FROM Client c WHERE c.information.mail = :email");
         q.setParameter("email", email);
@@ -42,7 +36,7 @@ public class ClientDao {
         return  c;
     }
     
-     public Collection<Client> findAll(){
+    public Collection<Client> findAll(){
         Query q=JpaUtil.obtenirEntityManager().createQuery("SELECT c FROM Client c");
         
         return (Collection<Client>)q.getResultList();
