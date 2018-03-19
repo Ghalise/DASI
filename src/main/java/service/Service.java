@@ -135,7 +135,7 @@ public class Service {
     public List<String> historyForClient (Client c){
         c.getHistorique().isEmpty();
         List <Voyance> voyancesClient= c.getHistorique();
-        List <String> voyances;
+        List <String> voyances = null;
         for (Voyance v: voyancesClient){
             String s= v.getMedium()+", le "+v.getBeginDate()+", durée: "+v.getDuration();
             voyances.add(s);

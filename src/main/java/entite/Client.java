@@ -92,7 +92,7 @@ public class Client implements Serializable {
         return date;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(String birthDate) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date dn = sdf.parse(birthDate);
         this.birthDate = dn;
