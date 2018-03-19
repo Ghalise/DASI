@@ -102,6 +102,7 @@ public class Service {
         
         VoyanceDao vdao=new VoyanceDao();
         EmployeeDao ed= new EmployeeDao();
+        ClientDao cd= new ClientDao();
         while ((repeatTransaction)&&(nbRepeat<3)){
             try{
                 repeatTransaction= false;
