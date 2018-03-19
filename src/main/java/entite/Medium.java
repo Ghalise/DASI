@@ -43,14 +43,6 @@ public abstract class Medium implements Serializable {
         this.biography = biography;
     }
 
-    public Long getId() {
-        return idMedium;
-    }
-
-    public void setId(Long id) {
-        this.idMedium = id;
-    }
-
     public String getName() {
         return name;
     }

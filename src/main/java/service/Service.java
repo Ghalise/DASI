@@ -81,15 +81,13 @@ public class Service {
     //Service pour le client puisse faire une demande de voyance avec le médium
     //qu'il a choisi (Gestion de la concurrence, on laisse la possibilité de 
     //recommencer la transaction 3 fois)
-    public Voyance askForVoyance(Client c, Medium m){
+    public Voyance askForVoyance(Client c, Medium m) throws EmployeeIsNotFree{
         
         JpaUtil.creerEntityManager();
         if (c==null || m==null){
             return null;
         }
         
-        boolean repeatTransaction= true;
-        int nbRepeat=0;
         Voyance v= null;
         
         List<Employee> emps=m.getEmployees();
@@ -105,25 +103,21 @@ public class Service {
                 size=sTemp;
             }
         }
-        if(e==null){ return null; }
+        if(e==null){ throw new EmployeeIsNotFree(); }
         
         VoyanceDao vdao=new VoyanceDao();
         EmployeeDao ed= new EmployeeDao();
-        while ((repeatTransaction)&&(nbRepeat<3)){
-            try{
-                repeatTransaction= false;
-                JpaUtil.ouvrirTransaction();
-                v=new Voyance(e,m,c);
-                vdao.create(v);
-                e.addVoyance(v);
-                ed.update(e);
-                sendNotification(c, m);
-                JpaUtil.validerTransaction();
-            }catch(RollbackException ex){
-                JpaUtil.annulerTransaction();
-                repeatTransaction=true;
-                nbRepeat++;
-            }
+        
+        try{
+            JpaUtil.ouvrirTransaction();
+            v=new Voyance(e,m,c);
+            vdao.create(v);
+            e.addVoyance(v);
+            ed.update(e);
+            sendNotification(c, m);
+            JpaUtil.validerTransaction();
+        }catch(RollbackException ex){
+            JpaUtil.annulerTransaction();
         }
         JpaUtil.fermerEntityManager();  
         return v;
@@ -350,22 +344,6 @@ public class Service {
         return m;
     }
     
-    //Service qui permet de définir explicitement quels sont les médiums qu'un
-    //employé peut incarner
-    public void affectEmployee(Employee emp, Medium m)
-    {
-        JpaUtil.creerEntityManager();
-        JpaUtil.ouvrirTransaction();
-        MediumDao md= new MediumDao();
-        try{
-            md.affectEmployee(emp,m);
-            JpaUtil.validerTransaction();
-        }catch(Exception e){
-            JpaUtil.annulerTransaction();
-        }finally{ 
-            JpaUtil.fermerEntityManager();
-        }  
-    }
 
     //**************** SERVICES COMPLEMENTAIRES ****************
     

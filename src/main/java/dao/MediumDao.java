@@ -63,27 +63,9 @@ public class MediumDao {
                 }
             }
             return best;
-        }else{
-            List<Employee> lbis= findAllFreeEmployee();
-            Employee best= lbis.get(0);
-            int nbVoyance=best.getNumberVoyance();
-            Employee curr;
-            for(int i=1; i<lbis.size(); i++){
-                curr=lbis.get(i);
-                if(curr.getNumberVoyance()<nbVoyance){
-                    best=curr;
-                    nbVoyance=curr.getNumberVoyance();
-                }
-            }
-            affectEmployee(best,m);
-            return best;
-        }
+        }else{ return null;}
     }
     
-    public void affectEmployee(Employee e, Medium m){
-        m.addEmployee(e);
-        JpaUtil.obtenirEntityManager().merge(m);
-    }
     
      // execution d'une requête qui va nous donner tous les employes contenus dans la BD POSITIF
      private List<Employee> findAllFreeEmployee(){

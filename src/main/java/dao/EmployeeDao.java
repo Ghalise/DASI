@@ -29,7 +29,7 @@ public class EmployeeDao {
     // utilisé ?
     public Employee update(Employee e){
         JpaUtil.obtenirEntityManager().merge(e);
-        long id=e.getId();
+        long id=e.getIdEmployee();
         Employee emp = find(id);
         return  emp;
     }
@@ -66,7 +66,7 @@ public class EmployeeDao {
                 q = JpaUtil.obtenirEntityManager().createQuery("select v from Voyance v where v.employee = :emp");
                 q.setParameter("emp", empe);
                 long nbConsultation = (long)q.getResultList().size();
-                float pourcentage = (100*(nbConsultation))/total;
+                float pourcentage = (float)(100*(nbConsultation))/total;
                 Pair<Long,Float> paire = new Pair<>(nbConsultation,pourcentage);
                 mapRes.putIfAbsent(empe, paire);
             }

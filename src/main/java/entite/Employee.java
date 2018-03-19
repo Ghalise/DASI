@@ -48,7 +48,7 @@ public class Employee implements Serializable {
     
     private boolean free;
     
-    @OneToMany(mappedBy="employee")
+    @OneToMany
     private List<Voyance> voyances;
     
     @Version
@@ -72,7 +72,47 @@ public class Employee implements Serializable {
         }
     }
 
-    public Long getId() {
+    public String getBirthDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String date = sdf.format(this.birthDate);
+        return date;
+    }
+
+    public void setBirthDate(String birthDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date dn = sdf.parse(birthDate);
+        this.birthDate = dn;
+    }
+    
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public List<Voyance> getVoyances() {
+        return voyances;
+    }
+
+    public Long getIdEmployee() {
         return idEmployee;
     }
     
